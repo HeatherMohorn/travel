@@ -1,3 +1,6 @@
+import './styles/style.scss'
+
+
 /* Global Variables */
 const baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
 const key = "9f2d67b95c319a699b2f533755b62b02";

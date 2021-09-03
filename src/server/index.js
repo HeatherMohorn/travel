@@ -1,7 +1,11 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const { allowedNodeEnvironmentFlags } = require('process');
+
 //Setup empty JS object to act as endpoint for all routes
 projectData = {};
 
-//Require Express to run server and routes
+var path = require('path')
 const express = require('express');
 
 //Start up an instance of an app
@@ -13,20 +17,24 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
+var json = {
+    'title': 'test json response',
+    'message': 'this is a message',
+    'time': 'now'
+}
+
 //Cors for cross origin allowance
 const cors = require('cors');
 app.use(cors());
+const fetch = require('node-fetch')
 
 //Initialize main project folder
 app.use(express.static('dist'));
 
-//Set up server
-const port = 8000;
-const server = app.listen(port, listening);
-
-function listening(){
-  console.log("server running on localhost: " + port);
-};
+// designates what port the app will listen to for incoming requests
+app.listen(8000, function () {
+    console.log('Example app listening on port 8000!')
+})
 
 
 //Set up GET route
