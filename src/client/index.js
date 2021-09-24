@@ -2,14 +2,8 @@ import './styles/style.scss'
 
 
 /* Global Variables */
-const baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
-const key = "9f2d67b95c319a699b2f533755b62b02";
-var index = 0;
-
-// Create a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.getMonth() + 1 +'.'+ d.getDate()+'.'+ d.getFullYear();
-
+const baseURL = 'http://api.geonames.org/searchJSON?q=';
+const username = "heather.mohorn";
 
 //add event listener for button
 document.getElementById('generate').addEventListener('click', performAction);
@@ -17,25 +11,29 @@ document.getElementById('generate').addEventListener('click', performAction);
 //do this when clicked
 
 function performAction(e){
-  const zip =  document.getElementById('zip').value;
-  const feeling = document.getElementById('feelings').value;
-  getWeather(baseURL,zip,key)
+  const destination =  document.getElementById('city').value;
+  const departureDate = document.getElementById('date').value;
+  getLatLong(baseURL,city,username)
   .then(function(data){
-    //console.log(data);
-    postData('/addData', {temp: data.main.temp, feeling: feeling, date: newDate});
+    //change to whatever geonames returns
+    postData('/addData', {});
   })
   .then(()=>{
     updateUI()
   })
 };
 
-//get temperature data from API
-const getWeather = async (baseURL, zip, key)=>{
-  const response = await fetch(baseURL+zip+'&appid='+key+'&units=imperial')
+//get location data from API
+const getLatLong = async (baseURL, destination, username)=>{
+  const response = await fetch(baseURL+destination+'&username='+username)
   try {
     const data = await response.json();
-    //console.log(data.main.temp);
+    console.log(data[0]);
     return data;
+    //{
+      //response.data.geonames[0].lat,
+      //response.data.geonames[0].lng,
+    //};
   }  catch(error) {
     console.log("error", error);
   }
@@ -67,9 +65,11 @@ const updateUI = async () => {
     try{
       const allData = await request.json();
 
-      document.getElementById('date').innerHTML = allData.date;
-      document.getElementById('temp').innerHTML = allData.temp;
-      document.getElementById('content').innerHTML = allData.feeling;
+      document.getElementById('weather').innerHTML = "update me";
+      document.getElementById('countdown').innerHTML = "update me";
+      document.getElementById('departureDate').innerHTML = departureDate;
+      document.getElementById('latitude').innerHTML = "update me";
+      document.getElementById('latitude').innerHTML = "update me";
       console.log(allData);
       index ++;
   }catch(error){

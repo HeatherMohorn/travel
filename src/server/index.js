@@ -50,9 +50,8 @@ app.post('/addData', addData);
 function addData(request, response){
   newData = request.body;
   newEntry = {
-    temp: newData.temp,
-    feeling: newData.feeling,
-    date: newData.date
+    lat: newData[0].lat,
+    lng: newData[0].lng,
   }
   projectData=newEntry;
   response.send(projectData);
