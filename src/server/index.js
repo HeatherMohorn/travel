@@ -7,7 +7,7 @@ projectData = {};
 
 var path = require('path')
 const express = require('express');
-
+≈≈
 //Start up an instance of an app
 const app = express();
 
@@ -48,10 +48,13 @@ function getData(request, response) {
 app.post('/addData', addData);
 
 function addData(request, response){
+  console.log("addData function");
   newData = request.body;
+  console.log("requested body");
   newEntry = {
-    lat: newData[0].lat,
-    lng: newData[0].lng,
+    lat: newData.lat,
+    lng: newData.lng,
+    country: newData.country
   }
   projectData=newEntry;
   response.send(projectData);

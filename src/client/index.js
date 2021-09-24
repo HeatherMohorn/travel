@@ -12,11 +12,11 @@ document.getElementById('generate').addEventListener('click', performAction);
 
 function performAction(e){
   const destination =  document.getElementById('city').value;
-  const departureDate = document.getElementById('date').value;
-  getLatLong(baseURL,city,username)
+  //const departureDate = document.getElementById('date').value;
+  getLatLong(baseURL,destination,username)
   .then(function(data){
     //change to whatever geonames returns
-    postData('/addData', {});
+    postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
   })
   .then(()=>{
     updateUI()
@@ -28,7 +28,10 @@ const getLatLong = async (baseURL, destination, username)=>{
   const response = await fetch(baseURL+destination+'&username='+username)
   try {
     const data = await response.json();
-    console.log(data[0]);
+    //console.log(data);
+    //console.log(data.geonames[0].lng);
+    //console.log(data.geonames[0].lat);
+    //console.log(data.geonames[0].countryCode);
     return data;
     //{
       //response.data.geonames[0].lat,
@@ -41,7 +44,8 @@ const getLatLong = async (baseURL, destination, username)=>{
 
 //async post data function
 const postData = async ( url = '', data = {})=>{
-      //console.log(data);
+      console.log("posting data");
+      console.log(data);
       const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
@@ -67,22 +71,12 @@ const updateUI = async () => {
 
       document.getElementById('weather').innerHTML = "update me";
       document.getElementById('countdown').innerHTML = "update me";
-      document.getElementById('departureDate').innerHTML = departureDate;
-      document.getElementById('latitude').innerHTML = "update me";
-      document.getElementById('latitude').innerHTML = "update me";
+      document.getElementById('departureDate').innerHTML = "update me";
+      document.getElementById('latitude').innerHTML = allData.lat;
+      document.getElementById('latitude').innerHTML = allData.long;
       console.log(allData);
       index ++;
   }catch(error){
     console.log("error", error);
   }
 }
-
-const getData = async (url = '') =>{
-  const request = await fetch(url);
-  try{
-    const allData = request.json()
-  }
-  catch(error){
-    console.log("error", error);
-  }
-};
