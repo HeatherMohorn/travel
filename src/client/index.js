@@ -12,7 +12,10 @@ document.getElementById('generate').addEventListener('click', performAction);
 
 function performAction(e){
   const destination =  document.getElementById('city').value;
-  //const departureDate = document.getElementById('date').value;
+  const departureDate = document.getElementById('date').value;
+  console.log(departureDate);
+  let count = countdown(departureDate);
+  const daysRemaining = countdown(departureDate);
   getLatLong(baseURL,destination,username)
   .then(function(data){
     //change to whatever geonames returns
@@ -22,6 +25,18 @@ function performAction(e){
     updateUI()
   })
 };
+
+function countdown(date){
+  let today = new Date();
+  console.log(today);
+  let depDate = new Date(date);
+  console.log(depDate);
+  let dif = depDate.getTime() - today.getTime();
+  let days = dif/(1000 * 3600 * 24);
+  days = Math.round(days);
+  console.log(days);
+  return days;
+}
 
 //get location data from API
 const getLatLong = async (baseURL, destination, username)=>{
@@ -71,7 +86,7 @@ const updateUI = async () => {
 
       document.getElementById('weather').innerHTML = "update me";
       document.getElementById('countdown').innerHTML = "update me";
-      document.getElementById('departureDate').innerHTML = "update me";
+      document.getElementById('departureDate').innerHTML = count;
       document.getElementById('latitude').innerHTML = allData.lat;
       document.getElementById('latitude').innerHTML = allData.long;
       console.log(allData);
