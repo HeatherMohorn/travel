@@ -4,6 +4,8 @@ import './styles/style.scss'
 /* Global Variables */
 const baseURL = 'http://api.geonames.org/searchJSON?q=';
 const username = "heather.mohorn";
+const weatherKey = '1fdda4fba1ca46608824ac663b96e9d1';
+const weatherURL =  'https://api.weatherbit.io/v2.0/forecast/daily?';
 
 //add event listener for button
 document.getElementById('generate').addEventListener('click', performAction);
@@ -13,24 +15,28 @@ document.getElementById('generate').addEventListener('click', performAction);
 function performAction(e){
   const destination =  document.getElementById('city').value;
   const departureDate = document.getElementById('date').value;
-  console.log(departureDate);
+  //console.log(departureDate);
   let count = countdown(departureDate);
   const daysRemaining = countdown(departureDate);
-  getLatLong(baseURL,destination,username)
-  .then(function(data){
-    //change to whatever geonames returns
-    postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
-  })
-  .then(()=>{
-    updateUI()
-  })
+  //getLatLong(baseURL,destination,username)
+  //.then(function(data){
+  //  postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
+  //})
+  //.then(()=>{
+  //  getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng)
+  //})
+  //.then(()=>{
+  //  updateUI()
+  //})
+  //REPLACE WITH LAT AND LONG RETURNED FROM GET LAT LONG
+  getWeather(weatherKey, weatherURL, 40, 140,daysRemaining);
 };
 
 function countdown(date){
   let today = new Date();
-  console.log(today);
+  //console.log(today);
   let depDate = new Date(date);
-  console.log(depDate);
+  //console.log(depDate);
   let dif = depDate.getTime() - today.getTime();
   let days = dif/(1000 * 3600 * 24);
   days = Math.round(days);
@@ -53,6 +59,24 @@ const getLatLong = async (baseURL, destination, username)=>{
       //response.data.geonames[0].lng,
     //};
   }  catch(error) {
+    console.log("error", error);
+  }
+}
+
+const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
+  const forecast = await fetch(weatherURL+'&lat='+lat+'&lon='+long+'&key='+weatherKey)
+  try{
+    const weather = await forecast.json();
+    console.log(weather.data[days]);
+    let high = weather.data[days].max_temp;
+    let low = weather.data[days].min_temp;
+    let description = weather.data[days].weather.description;
+    console.log(high);
+    console.log(low);
+    console.log(description);
+    return weather;
+  }
+  catch(error){
     console.log("error", error);
   }
 }
