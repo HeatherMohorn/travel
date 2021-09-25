@@ -29,7 +29,10 @@ function performAction(e){
   //  updateUI()
   //})
   //REPLACE WITH LAT AND LONG RETURNED FROM GET LAT LONG
-  getWeather(weatherKey, weatherURL, 40, 140,daysRemaining);
+  getWeather(weatherKey, weatherURL, 40, 140,daysRemaining)
+  //.then(()=>{
+  //  updateUI()
+  //})
 };
 
 function countdown(date){
@@ -71,10 +74,18 @@ const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
     let high = weather.data[days].max_temp;
     let low = weather.data[days].min_temp;
     let description = weather.data[days].weather.description;
-    console.log(high);
-    console.log(low);
-    console.log(description);
-    return weather;
+    //console.log(high);
+    //console.log(low);
+    //console.log(description);
+    let stats = {
+      high: high,
+      low: low,
+      description: description
+    };
+    console.log(stats.high);
+    console.log(stats.low);
+    console.log(stats.description);
+    return stats;
   }
   catch(error){
     console.log("error", error);
