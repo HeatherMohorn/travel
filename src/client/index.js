@@ -6,6 +6,8 @@ const baseURL = 'http://api.geonames.org/searchJSON?q=';
 const username = "heather.mohorn";
 const weatherKey = '1fdda4fba1ca46608824ac663b96e9d1';
 const weatherURL =  'https://api.weatherbit.io/v2.0/forecast/daily?';
+const pixURL = 'https://pixabay.com/api/?key=';
+const pixKey = '23559203-267f128dc735339c66b1aebd9';
 
 //add event listener for button
 document.getElementById('generate').addEventListener('click', performAction);
@@ -18,23 +20,41 @@ function performAction(e){
   //console.log(departureDate);
   let count = countdown(departureDate);
   const daysRemaining = countdown(departureDate);
-  //getLatLong(baseURL,destination,username)
-  //.then(function(data){
-  //  postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
-  //})
-  //.then(()=>{
-  //  getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng)
-  //})
-  //.then(()=>{
-  //  updateUI()
-  //})
+
+
+  getLatLong(baseURL,destination,username)
+  .then(function(data){
+    postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
+  })
+  .then(()=>{
+    getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng,daysRemaining)
+  })
+  .then(()=>{
+    getPic(pixKey, pixURL, destination);
+  })
+  .then(()=>{
+    updateUI()
+  })
+
   //REPLACE WITH LAT AND LONG RETURNED FROM GET LAT LONG
-  getWeather(weatherKey, weatherURL, 40, 140,daysRemaining)
+  //getWeather(weatherKey, weatherURL, 40, 140,daysRemaining)
   //.then(()=>{
   //  updateUI()
   //})
+
 };
 
+const getPic = async(pixKey, pixURL, destination)=>{
+  const resp = await fetch(pixURL+pixKey+'&q='+destination)
+  try{
+    const res = await resp.json();
+    console.log(res.hits[0].webformatURL);
+    return res.hits[0].webformatURL;
+  }
+  catch(error){
+    console.log("error", error);
+  }
+}
 function countdown(date){
   let today = new Date();
   //console.log(today);
