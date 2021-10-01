@@ -3,11 +3,11 @@ dotenv.config();
 const { allowedNodeEnvironmentFlags } = require('process');
 
 //Setup empty JS object to act as endpoint for all routes
-projectData = {};
+let projectData = {};
 
 var path = require('path')
 const express = require('express');
-≈≈
+
 //Start up an instance of an app
 const app = express();
 
@@ -41,6 +41,7 @@ app.listen(8000, function () {
 app.get('/all', getData);
 
 function getData(request, response) {
+  console.log("begin getData");
   response.send(projectData);
 }
 
@@ -48,7 +49,7 @@ function getData(request, response) {
 app.post('/addData', addData);
 
 function addData(request, response){
-  console.log("addData function");
+  console.log("begin addData");
   newData = request.body;
   console.log("requested body");
   newEntry = {
@@ -58,5 +59,6 @@ function addData(request, response){
   }
   projectData=newEntry;
   response.send(projectData);
+  console.log("addData sends response: " + projectData);
   console.log(projectData);
 }

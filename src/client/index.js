@@ -18,22 +18,26 @@ function performAction(e){
   const destination =  document.getElementById('city').value;
   const departureDate = document.getElementById('date').value;
   //console.log(departureDate);
-  let count = countdown(departureDate);
+  //let count = countdown(departureDate);
   const daysRemaining = countdown(departureDate);
 
 
   getLatLong(baseURL,destination,username)
   .then(function(data){
-    postData('/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
+    postData('http://localhost:8000/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
+    return data
   })
-  .then(()=>{
+  .then((data)=>{
+    //getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng,daysRemaining)
     getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng,daysRemaining)
+    return data
   })
-  .then(()=>{
+  .then((data)=>{
     getPic(pixKey, pixURL, destination);
+    return data
   })
-  .then(()=>{
-    updateUI()
+  .then((data)=>{
+    updateUI(data);
   })
 
   //REPLACE WITH LAT AND LONG RETURNED FROM GET LAT LONG
@@ -45,7 +49,8 @@ function performAction(e){
 };
 
 const getPic = async(pixKey, pixURL, destination)=>{
-  const resp = await fetch(pixURL+pixKey+'&q='+destination)
+  console.log("begin getPic" + destination);
+  const resp = await fetch(pixURL+pixKey+'&q='+destination+'+view')
   try{
     const res = await resp.json();
     console.log(res.hits[0].webformatURL);
@@ -56,6 +61,7 @@ const getPic = async(pixKey, pixURL, destination)=>{
   }
 }
 function countdown(date){
+  console.log("begin countdown");
   let today = new Date();
   //console.log(today);
   let depDate = new Date(date);
@@ -63,12 +69,13 @@ function countdown(date){
   let dif = depDate.getTime() - today.getTime();
   let days = dif/(1000 * 3600 * 24);
   days = Math.round(days);
-  console.log(days);
+  console.log("countdown returns " + days);
   return days;
 }
 
 //get location data from API
 const getLatLong = async (baseURL, destination, username)=>{
+  console.log("begin getLatLong");
   const response = await fetch(baseURL+destination+'&username='+username)
   try {
     const data = await response.json();
@@ -76,6 +83,8 @@ const getLatLong = async (baseURL, destination, username)=>{
     //console.log(data.geonames[0].lng);
     //console.log(data.geonames[0].lat);
     //console.log(data.geonames[0].countryCode);
+    console.log("getLatLong returns");
+    console.log(data);
     return data;
     //{
       //response.data.geonames[0].lat,
@@ -87,10 +96,12 @@ const getLatLong = async (baseURL, destination, username)=>{
 }
 
 const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
+  console.log("begin getWeather");
+  console.log(days);
   const forecast = await fetch(weatherURL+'&lat='+lat+'&lon='+long+'&key='+weatherKey)
   try{
     const weather = await forecast.json();
-    console.log(weather.data[days]);
+    console.log("weather.data[days] " + weather.data[days]);
     let high = weather.data[days].max_temp;
     let low = weather.data[days].min_temp;
     let description = weather.data[days].weather.description;
@@ -102,9 +113,11 @@ const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
       low: low,
       description: description
     };
-    console.log(stats.high);
-    console.log(stats.low);
-    console.log(stats.description);
+    console.log("High: "+stats.high);
+    console.log("Low: "+stats.low);
+    console.log("Description: "+stats.description);
+    console.log("getWeather returns stats: ");
+    console.log(stats);
     return stats;
   }
   catch(error){
@@ -114,7 +127,8 @@ const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
 
 //async post data function
 const postData = async ( url = '', data = {})=>{
-      console.log("posting data");
+      console.log("begin postData");
+      console.log("data:");
       console.log(data);
       const response = await fetch(url, {
       method: 'POST',
@@ -127,7 +141,7 @@ const postData = async ( url = '', data = {})=>{
 
       try {
         const newData = await response.json();
-        console.log(newData);
+        console.log("postData returns " + newData);
         return newData;
       }catch(error) {
       console.log("error", error);
@@ -135,17 +149,17 @@ const postData = async ( url = '', data = {})=>{
   };
 
 const updateUI = async () => {
-    const request = await fetch('/all');
+    console.log("begin updateUI");
+    const request = await fetch('http://localhost:8000/all');
     try{
       const allData = await request.json();
 
-      document.getElementById('weather').innerHTML = "update me";
+      document.getElementById('weather').innerHTML = "Forecast: " + data.high;
       document.getElementById('countdown').innerHTML = "update me";
-      document.getElementById('departureDate').innerHTML = count;
+      document.getElementById('departureDate').innerHTML = "update me";
       document.getElementById('latitude').innerHTML = allData.lat;
       document.getElementById('latitude').innerHTML = allData.long;
       console.log(allData);
-      index ++;
   }catch(error){
     console.log("error", error);
   }
