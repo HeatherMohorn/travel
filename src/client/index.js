@@ -47,8 +47,12 @@ const getPic = async(pixKey, pixURL, destination)=>{
   const resp = await fetch(pixURL+pixKey+'&q='+destination+'+view')
   try{
     const res = await resp.json();
-    console.log(res.hits[0].webformatURL);
-    return res.hits[0].webformatURL;
+    if(res.totalHits>0){
+      console.log(res.hits[0].webformatURL);
+      return res.hits[0].webformatURL;
+    }
+    else return "https://pixabay.com/get/g0ea3343390e4a7fc2bd25892ed260a5d286f226627dc5d05f871c66555b7839caf9a3dccfb99b42760a0e691ab94ac84.jpg";
+
   }
   catch(error){
     console.log("error", error);
