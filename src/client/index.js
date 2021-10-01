@@ -29,7 +29,7 @@ function performAction(e){
 
   getWeather(weatherKey, weatherURL, locData.geonames[0].lat, locData.geonames[0].lng,daysRemaining)
   .then(async (weatherData) =>{
-    const response = await postData('http://localhost:8000/addData', {high: weatherData.high, low: weatherData.low, description: weatherData.description})
+    const response = await postData('http://localhost:8000/addData', {high: weatherData.high, low: weatherData.low, description: weatherData.description, countdown:daysRemaining})
   })
 
   getPic(pixKey, pixURL, destination)
@@ -148,11 +148,11 @@ const updateUI = async () => {
     try{
       const allData = await request.json();
 
-      document.getElementById('weather').innerHTML = "Forecast: " + allData.high;
-      document.getElementById('countdown').innerHTML = "update me";
-      document.getElementById('departureDate').innerHTML = "update me";
-      document.getElementById('latitude').innerHTML = allData.lat;
-      document.getElementById('latitude').innerHTML = allData.long;
+      document.getElementById('high').innerHTML = "High temperature: " + allData.high.toString();
+      document.getElementById('low').innerHTML = "Low temperature: " + allData.low.toString();
+      document.getElementById('weather').innerHTML = "Forecast: " + allData.description;
+      document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
+      document.getElementById('locationImage').innerHTML = "<img src ="+allData.image+"></img>";
       console.log(allData);
   }catch(error){
     console.log("error", error);

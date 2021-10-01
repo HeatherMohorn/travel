@@ -60,6 +60,7 @@ function addData(request, response){
     projectData.high = request.body.high;
     projectData.low = request.body.low;
     projectData.description = request.body.description;
+    projectData.countdown = request.body.countdown;
   }
   else{
     projectData.image = request.body.image;
