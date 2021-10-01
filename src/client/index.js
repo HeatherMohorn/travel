@@ -23,30 +23,24 @@ function performAction(e){
 
 
   getLatLong(baseURL,destination,username)
-  .then(function(data){
-    postData('http://localhost:8000/addData', {lat: data.geonames[0].lat, long:data.geonames[0].lng, country:data.geonames[0].countryCode});
-    return data
-  })
-  .then((data)=>{
-    //getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng,daysRemaining)
-    getWeather(weatherKey, weatherURL, data.geonames[0].lat, data.geonames[0].lng,daysRemaining)
-    return data
-  })
-  .then((data)=>{
-    getPic(pixKey, pixURL, destination);
-    return data
-  })
-  .then((data)=>{
-    updateUI(data);
+  .then(async(locData) => {
+    const respone = await postData('http://localhost:8000/addData', {lat: locData.geonames[0].lat, long:locData.geonames[0].lng, city:destination})
+
+
+  getWeather(weatherKey, weatherURL, locData.geonames[0].lat, locData.geonames[0].lng,daysRemaining)
+  .then(async (weatherData) =>{
+    const response = await postData('http://localhost:8000/addData', {high: weatherData.high, low: weatherData.low, description: weatherData.description})
   })
 
-  //REPLACE WITH LAT AND LONG RETURNED FROM GET LAT LONG
-  //getWeather(weatherKey, weatherURL, 40, 140,daysRemaining)
-  //.then(()=>{
-  //  updateUI()
-  //})
-
-};
+  getPic(pixKey, pixURL, destination)
+  .then(async (imageURL)=>{
+    const response = await postData('http://localhost:8000/addData', {image: imageURL})
+  })
+  .then(()=>{
+    updateUI();
+  })
+})
+}
 
 const getPic = async(pixKey, pixURL, destination)=>{
   console.log("begin getPic" + destination);
@@ -154,7 +148,7 @@ const updateUI = async () => {
     try{
       const allData = await request.json();
 
-      document.getElementById('weather').innerHTML = "Forecast: " + data.high;
+      document.getElementById('weather').innerHTML = "Forecast: " + allData.high;
       document.getElementById('countdown').innerHTML = "update me";
       document.getElementById('departureDate').innerHTML = "update me";
       document.getElementById('latitude').innerHTML = allData.lat;

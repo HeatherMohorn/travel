@@ -41,7 +41,8 @@ app.listen(8000, function () {
 app.get('/all', getData);
 
 function getData(request, response) {
-  console.log("begin getData");
+  console.log("begin getData- send projectData");
+  console.log(projectData);
   response.send(projectData);
 }
 
@@ -51,14 +52,34 @@ app.post('/addData', addData);
 function addData(request, response){
   console.log("begin addData");
   newData = request.body;
+  if(request.body.lat){
+    projectData.lat = request.body.lat;
+    projectData.long = request.body.long;
+  }
+  else if(request.body.high){
+    projectData.high = request.body.high;
+    projectData.low = request.body.low;
+    projectData.description = request.body.description;
+  }
+  else{
+    projectData.image = request.body.image;
+  }
+
+  response.send(projectData);
+  console.log("addData sends response: " + projectData);
+  console.log(projectData);
+  /*
+
+
   console.log("requested body");
   newEntry = {
     lat: newData.lat,
-    lng: newData.lng,
+    lng: newData.long,
     country: newData.country
   }
   projectData=newEntry;
   response.send(projectData);
   console.log("addData sends response: " + projectData);
   console.log(projectData);
+  */
 }
