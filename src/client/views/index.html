@@ -7,30 +7,44 @@
 
 <link rel="shortcut icon" href="#">
 </head>
- <body>
-<div id = "app">
-  <div class ="container headline">
-    <h1>Travel Planner</h1>
-  </div>
-  <div class ="container city">
-    <label for="zip">Enter detination city</label>
+
+<body>
+
+<div class = "app">
+<div class ="headline">
+  <h1>Travel Planner</h1>
+</div>
+
+<div class="box">
+  <div class="title">Enter trip details:</div>
+  <div class="entry">
+    <label for="zip">Destination City</label>
     <input type="text" id="city" placeholder="Destination city"></input>
   </div>
-  <div class ="container date">
+  <div class="entry">
     <label for="date">Departure Date</label>
-    <input type="date" class= "dateInput" id="date"></input>
+    <input type="date" id="date"></input>
+  </div>
+  <div class="entry">
     <button id="generate" type = "submit"> Submit </button>
   </div>
-  <div class ="container tripDetails">
-    <div class = "title">Trip Details</div>
-   <div id = "high"></div>
-    <div id = "low"></div>
-    <div id = "weather"></div>
-    <div id = "countdown"></div>
-   <div id = "locationImage"></div>
-  </div>
-  </div>
-  </div>
+</div>
+
+<div class="box">
+  <div class = "title">Bon Voyage!</div>
+  <div id = "high"></div>
+  <div id = "low"></div>
+  <div id = "weather"></div>
+  <div id = "countdown"></div>
+
+</div>
+
+<div class="imageContainer">
+  <div id = "locationImage"></div>
+</div>
+
+</div>
+
 
 </body>
 </html>

@@ -1,19 +1,48 @@
-.container{
-  background-color: #111111;
-}
-
-.city{
-
-}
-
-.headline{
-
-}
-
-.dateInput{
-
+body {
+  font-family: "Nunito";
+  color:white;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .entry{
+  display:inline;
+}
 
+.container{
+  justify-content: center;
+  text-align: center;
+  margin: 20px;
+  display:flex;
+  flex-direction: column;
+}
+
+.headline{
+  background-color: red;
+  text-align: center;
+  font-size: 25px;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.title{
+  font-size:18px;
+  font-weight: bold;
+}
+
+.box{
+  width:50vw;
+  background-color: red;
+  margin: 20px;
+  justify-content: center;
+  text-align: center;
+  display:flex;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+.imageContainer{
+  width:50wv;
 }
