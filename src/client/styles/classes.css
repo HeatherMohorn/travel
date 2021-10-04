@@ -5,6 +5,16 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: #4ABDAC;
+}
+
+img{
+  width: 50%;
+  height: auto;
+}
+
+.button:hover{
+  background-color: #4CAF50;
 }
 
 .entry{
@@ -20,7 +30,7 @@ body {
 }
 
 .headline{
-  background-color: red;
+  background-color: #F7B773;
   text-align: center;
   font-size: 25px;
   justify-content: center;
@@ -33,16 +43,12 @@ body {
 }
 
 .box{
-  width:50vw;
-  background-color: red;
+  width:75vw;
+  background-color: #FC4A1A;
   margin: 20px;
   justify-content: center;
   text-align: center;
   display:flex;
   flex-direction: column;
   border-radius: 5px;
-}
-
-.imageContainer{
-  width:50wv;
 }

@@ -8,6 +8,7 @@ const weatherKey = '1fdda4fba1ca46608824ac663b96e9d1';
 const weatherURL =  'https://api.weatherbit.io/v2.0/forecast/daily?';
 const pixURL = 'https://pixabay.com/api/?key=';
 const pixKey = '23559203-267f128dc735339c66b1aebd9';
+let index = 0;
 
 //add event listener for button
 document.getElementById('generate').addEventListener('click', performAction);
@@ -51,7 +52,7 @@ const getPic = async(pixKey, pixURL, destination)=>{
       console.log(res.hits[0].webformatURL);
       return res.hits[0].webformatURL;
     }
-    else return "https://pixabay.com/get/g0ea3343390e4a7fc2bd25892ed260a5d286f226627dc5d05f871c66555b7839caf9a3dccfb99b42760a0e691ab94ac84.jpg";
+    else return "https://cdn.pixabay.com/photo/2021/09/07/11/53/car-6603726_1280.jpg";
 
   }
   catch(error){
@@ -151,12 +152,19 @@ const updateUI = async () => {
     const request = await fetch('http://localhost:8000/all');
     try{
       const allData = await request.json();
-
+      document.getElementById('message').innerHTML = "Bon Voyage!";
       document.getElementById('high').innerHTML = "High temperature: " + allData.high.toString();
       document.getElementById('low').innerHTML = "Low temperature: " + allData.low.toString();
       document.getElementById('weather').innerHTML = "Forecast: " + allData.description;
-      document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
       document.getElementById('locationImage').innerHTML = "<img src ="+allData.image+"></img>";
+      document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
+      if (allData.countdown != 1){
+        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
+      }
+      else {
+        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " day to go";
+      }
+      index ++;
       console.log(allData);
   }catch(error){
     console.log("error", error);
