@@ -14,7 +14,6 @@ let index = 0;
 document.getElementById('generate').addEventListener('click', performAction);
 
 //do this when clicked
-
 function performAction(e){
   const destination =  document.getElementById('city').value;
   const departureDate = document.getElementById('date').value;
@@ -63,7 +62,7 @@ const getPic = async(pixKey, pixURL, destination, locData)=>{
   }
 }
 
-
+//calculate days until trip
 function countdown(date){
   console.log("begin countdown");
   let today = new Date();
@@ -77,6 +76,7 @@ function countdown(date){
   return days;
 }
 
+//calculate trip length
 function tripLength(date1, date2){
   let depDate = new Date(date1);
   let retDate = new Date(date2);
@@ -92,29 +92,19 @@ const getLatLong = async (baseURL, destination, username)=>{
   const response = await fetch(baseURL+destination+'&username='+username)
   try {
     const data = await response.json();
-    //console.log(data);
-    //console.log(data.geonames[0].lng);
-    //console.log(data.geonames[0].lat);
-    //console.log(data.geonames[0].countryCode);
     console.log("getLatLong returns");
     console.log(data);
     return data;
-    //{
-      //response.data.geonames[0].lat,
-      //response.data.geonames[0].lng,
-    //};
-  }  catch(error) {
+  }
+  catch(error) {
     console.log("error", error);
   }
 }
 
 const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
-  console.log("begin getWeather");
-  console.log(days);
   const forecast = await fetch(weatherURL+'&lat='+lat+'&lon='+long+'&key='+weatherKey)
   try{
     const weather = await forecast.json();
-    console.log("weather.data[days] " + weather.data[days]);
     let high = weather.data[days].max_temp;
     let low = weather.data[days].min_temp;
     let description = weather.data[days].weather.description;
@@ -126,11 +116,6 @@ const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
       low: low,
       description: description
     };
-    console.log("High: "+stats.high);
-    console.log("Low: "+stats.low);
-    console.log("Description: "+stats.description);
-    console.log("getWeather returns stats: ");
-    console.log(stats);
     return stats;
   }
   catch(error){
@@ -140,9 +125,6 @@ const getWeather = async(weatherKey, weatherURL, lat, long, days)=>{
 
 //async post data function
 const postData = async ( url = '', data = {})=>{
-      console.log("begin postData");
-      console.log("data:");
-      console.log(data);
       const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
@@ -162,7 +144,6 @@ const postData = async ( url = '', data = {})=>{
   };
 
 const updateUI = async () => {
-    console.log("begin updateUI");
     const request = await fetch('http://localhost:8000/all');
     try{
       const allData = await request.json();
@@ -177,9 +158,7 @@ const updateUI = async () => {
       else {
         document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " day to go until your " + allData.length.toString() + "-day trip!";
       }
-
       index ++;
-      console.log(allData);
   }catch(error){
     console.log("error", error);
   }

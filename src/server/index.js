@@ -46,8 +46,6 @@ app.listen(8000, function () {
 app.get('/all', getData);
 
 function getData(request, response) {
-  console.log("begin getData- send projectData");
-  console.log(projectData);
   response.send(projectData);
 }
 
@@ -55,13 +53,14 @@ function getData(request, response) {
 app.post('/addData', addData);
 
 function addData(request, response){
-  console.log("begin addData");
   newData = request.body;
+  //add latitude, longitude, and country if geodata
   if(request.body.lat){
     projectData.lat = request.body.lat;
     projectData.long = request.body.long;
     projectData.country = request.body.country;
   }
+  //add weather and trip length if weather data
   else if(request.body.high){
     projectData.high = request.body.high;
     projectData.low = request.body.low;
@@ -69,25 +68,10 @@ function addData(request, response){
     projectData.countdown = request.body.countdown;
     projectData.length = request.body.length;
   }
+  //add image link if pix data
   else{
     projectData.image = request.body.image;
   }
-
+  //send the projectData object
   response.send(projectData);
-  console.log("addData sends response: " + projectData);
-  console.log(projectData);
-  /*
-
-
-  console.log("requested body");
-  newEntry = {
-    lat: newData.lat,
-    lng: newData.long,
-    country: newData.country
-  }
-  projectData=newEntry;
-  response.send(projectData);
-  console.log("addData sends response: " + projectData);
-  console.log(projectData);
-  */
 }
