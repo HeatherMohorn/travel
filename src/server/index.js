@@ -11,6 +11,11 @@ const express = require('express');
 //Start up an instance of an app
 const app = express();
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 /* Middleware */
 //Configuring express to use body-bodyParser
 const bodyParser = require('body-parser');
