@@ -60,12 +60,14 @@ function addData(request, response){
   if(request.body.lat){
     projectData.lat = request.body.lat;
     projectData.long = request.body.long;
+    projectData.country = request.body.country;
   }
   else if(request.body.high){
     projectData.high = request.body.high;
     projectData.low = request.body.low;
     projectData.description = request.body.description;
     projectData.countdown = request.body.countdown;
+    projectData.length = request.body.length;
   }
   else{
     projectData.image = request.body.image;

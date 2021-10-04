@@ -26,6 +26,10 @@
     <input type="date" id="date"></input>
   </div>
   <div class="entry">
+    <label for="retDate">Return Date</label>
+    <input type="date" id="retDate"></input>
+  </div>
+  <div class="entry">
     <button id="generate" type = "submit"> Submit </button>
   </div>
 </div>
@@ -35,7 +39,7 @@
   <div id = "high"></div>
   <div id = "low"></div>
   <div id = "weather"></div>
-  <div id = "countdown"></div>
+  <div id = "countdown">Countdown goes here</div>
 </div>
 
 <div class="box">
@@ -43,15 +47,7 @@
 </div>
 
 </div>
-<script>
- // Check that service workers are supported
- if ('serviceWorker' in navigator) {
-     // Use the window load event to keep the page load performant
-     window.addEventListener('load', () => {
-         navigator.serviceWorker.register('/service-worker.js');
-     });
- }
-</script>
+
 
 </body>
 </html>

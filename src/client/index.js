@@ -18,19 +18,21 @@ document.getElementById('generate').addEventListener('click', performAction);
 function performAction(e){
   const destination =  document.getElementById('city').value;
   const departureDate = document.getElementById('date').value;
+  const returnDate = document.getElementById('retDate').value;
   //console.log(departureDate);
   //let count = countdown(departureDate);
   const daysRemaining = countdown(departureDate);
+  const tripLength = countdown(returnDate, departureDate);
 
 
   getLatLong(baseURL,destination,username)
   .then(async(locData) => {
-    const respone = await postData('http://localhost:8000/addData', {lat: locData.geonames[0].lat, long:locData.geonames[0].lng, city:destination})
+    const respone = await postData('http://localhost:8000/addData', {lat: locData.geonames[0].lat, long:locData.geonames[0].lng, city:destination, country:locData.geonames[0].countryName})
 
 
-  getWeather(weatherKey, weatherURL, locData.geonames[0].lat, locData.geonames[0].lng,daysRemaining)
+  getWeather(weatherKey, weatherURL, locData.geonames[0].lat, locData.geonames[0].lng,daysRemaining, tripLength)
   .then(async (weatherData) =>{
-    const response = await postData('http://localhost:8000/addData', {high: weatherData.high, low: weatherData.low, description: weatherData.description, countdown:daysRemaining})
+    const response = await postData('http://localhost:8000/addData', {high: weatherData.high, low: weatherData.low, description: weatherData.description, countdown:daysRemaining, length: tripLength})
   })
 
   getPic(pixKey, pixURL, destination)
@@ -43,7 +45,7 @@ function performAction(e){
 })
 }
 
-const getPic = async(pixKey, pixURL, destination)=>{
+const getPic = async(pixKey, pixURL, destination, locData)=>{
   console.log("begin getPic" + destination);
   const resp = await fetch(pixURL+pixKey+'&q='+destination+'+view')
   try{
@@ -52,13 +54,16 @@ const getPic = async(pixKey, pixURL, destination)=>{
       console.log(res.hits[0].webformatURL);
       return res.hits[0].webformatURL;
     }
-    else return "https://cdn.pixabay.com/photo/2021/09/07/11/53/car-6603726_1280.jpg";
-
+    else {
+      return "https://cdn.pixabay.com/photo/2021/09/07/11/53/car-6603726_1280.jpg";
+    }
   }
   catch(error){
     console.log("error", error);
   }
 }
+
+
 function countdown(date){
   console.log("begin countdown");
   let today = new Date();
@@ -69,6 +74,15 @@ function countdown(date){
   let days = dif/(1000 * 3600 * 24);
   days = Math.round(days);
   console.log("countdown returns " + days);
+  return days;
+}
+
+function tripLength(date1, date2){
+  let depDate = new Date(date1);
+  let retDate = new Date(date2);
+  let dif = depDate.getTime() - retDate.getTime();
+  let days = dif/(1000 * 3600 * 24);
+  days = Math.round(days);
   return days;
 }
 
@@ -157,13 +171,13 @@ const updateUI = async () => {
       document.getElementById('low').innerHTML = "Low temperature: " + allData.low.toString();
       document.getElementById('weather').innerHTML = "Forecast: " + allData.description;
       document.getElementById('locationImage').innerHTML = "<img src ="+allData.image+"></img>";
-      document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
       if (allData.countdown != 1){
-        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go";
+        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " days to go until your " + allData.length.toString() + "-day trip!";
       }
       else {
-        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " day to go";
+        document.getElementById('countdown').innerHTML = allData.countdown.toString()+ " day to go until your " + allData.length.toString() + "-day trip!";
       }
+
       index ++;
       console.log(allData);
   }catch(error){
