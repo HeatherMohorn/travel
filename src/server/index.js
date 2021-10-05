@@ -37,9 +37,11 @@ const fetch = require('node-fetch')
 app.use(express.static('dist'));
 
 // designates what port the app will listen to for incoming requests
-app.listen(8000, function () {
-    console.log('Example app listening on port 8000!')
-})
+app.listen(8000, listening);
+
+function listening() {
+    console.log('Example app listening on port 8000!');
+}
 
 
 //Set up GET route
