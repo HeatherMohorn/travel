@@ -77,3 +77,4 @@ function addData(request, response){
   //send the projectData object
   response.send(projectData);
 }
+module.exports = app;
